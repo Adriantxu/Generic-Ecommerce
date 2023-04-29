@@ -26,8 +26,8 @@ CREATE TABLE Product_Categories (
 );
 
 CREATE TABLE Shopping_Cart (
-  user_id INTEGER REFERENCES User(id),
+  user_id INTEGER REFERENCES Users(id),
   product_id INTEGER REFERENCES Product(id),
   quantity INTEGER NOT NULL,
-  PRIMARY KEY (user_id, product_id)
+  PRIMARY KEY (user_id)
 );

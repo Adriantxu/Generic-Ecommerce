@@ -5,16 +5,18 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Product } from './product.model';
+import { Categories } from './categories.model';
 
 @Table
 export class ProductCategories extends Model {
   @Column
   @PrimaryKey
-  @ForeignKey()
+  @ForeignKey(() => Product)
   product_id: number;
 
   @Column
   @PrimaryKey
-  @ForeignKey()
+  @ForeignKey(() => Categories)
   category_id: number;
 }
