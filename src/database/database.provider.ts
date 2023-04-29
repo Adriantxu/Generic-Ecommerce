@@ -1,4 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
+import { User } from './models/user.model';
+import { Product } from './models/product.model';
+import { Categories } from './models/categories.model';
+import { ProductCategories } from './models/product_categories.model';
+import { ShoppingCart } from './models/shopping_cart.model';
 
 export const databaseProviders = [
   {
@@ -10,7 +15,14 @@ export const databaseProviders = [
         process.env.POSTGRES_PASSWORD,
         { host: 'localhost', dialect: 'postgres', port: +process.env.DB_PORT },
       );
-      sequelize.addModels([]), await sequelize.sync();
+      sequelize.addModels([
+        User,
+        Product,
+        Categories,
+        ProductCategories,
+        ShoppingCart,
+      ]),
+        await sequelize.sync();
       return sequelize;
     },
   },
