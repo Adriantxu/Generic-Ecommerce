@@ -24,3 +24,10 @@ CREATE TABLE Product_Categories (
   category_id INTEGER REFERENCES Categories(id),
   PRIMARY KEY (product_id, category_id)
 );
+
+CREATE TABLE Shopping_Cart (
+  user_id INTEGER REFERENCES User(id),
+  product_id INTEGER REFERENCES Product(id),
+  quantity INTEGER NOT NULL,
+  PRIMARY KEY (user_id, product_id)
+);
