@@ -2,6 +2,7 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -29,6 +30,6 @@ export class ShoppingCart extends Model {
   @BelongsTo(() => User, 'user_id')
   user: User;
 
-  @BelongsTo(() => Product, 'product_id')
+  @HasMany(() => Product, 'product_id')
   product: Product[];
 }

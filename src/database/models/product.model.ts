@@ -41,8 +41,8 @@ export class Product extends Model {
   @BelongsToMany(() => Categories, () => ProductCategories)
   categories: Categories[];
 
-  @HasMany(() => ShoppingCart)
-  shopping_carts: ShoppingCart[];
+  @BelongsTo(() => ShoppingCart, "user_id")
+  shopping_carts: ShoppingCart;
 
   @BelongsTo(() => User, 'owner_id')
   owner: User;
