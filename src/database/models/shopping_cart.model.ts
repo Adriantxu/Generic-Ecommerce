@@ -1,6 +1,5 @@
 import {
   BelongsTo,
-  BelongsToMany,
   Column,
   ForeignKey,
   Model,
@@ -15,17 +14,21 @@ export class ShoppingCart extends Model {
   @PrimaryKey
   @ForeignKey(() => User)
   @Column
-  @BelongsTo(() => User, 'id')
   user_id: number;
 
   @PrimaryKey
   @ForeignKey(() => Product)
   @Column
-  @BelongsToMany(() => Product, 'id')
   product_id: number;
 
   @Column({
     allowNull: false,
   })
   quantity: number;
+
+  @BelongsTo(() => User, 'user_id')
+  user: User;
+
+  @BelongsTo(() => Product, 'product_id')
+  product: Product[];
 }

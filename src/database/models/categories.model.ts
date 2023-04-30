@@ -1,23 +1,26 @@
 import {
   AutoIncrement,
+  BelongsToMany,
   Column,
-  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 import { ProductCategories } from './product_categories.model';
+import { Product } from './product.model';
 
-@Table
+@Table({ tableName: 'Categories' })
 export class Categories extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
-  @HasMany(() => ProductCategories, 'category_id')
   id: number;
 
   @Column({
     allowNull: false,
   })
   name: string;
+
+  @BelongsToMany(() => Product, () => ProductCategories)
+  products: Product[];
 }

@@ -7,8 +7,6 @@ import { ShoppingCart } from './shopping_cart.model';
 export class User extends Model {
   @PrimaryKey
   @Column
-  @HasMany(() => Product, 'owner_id')
-  @HasOne(() => ShoppingCart, 'user_id')
   id: number;
 
   @Column({
@@ -31,4 +29,10 @@ export class User extends Model {
     allowNull: false,
   })
   role: string;
+
+  @HasMany(() => Product, 'owner_id')
+  products: Product[];
+
+  @HasOne(() => ShoppingCart, 'user_id')
+  shopping_cart: ShoppingCart;
 }

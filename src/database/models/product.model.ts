@@ -1,4 +1,6 @@
 import {
+  BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   HasMany,
@@ -9,13 +11,12 @@ import {
 import { User } from './user.model';
 import { ProductCategories } from './product_categories.model';
 import { ShoppingCart } from './shopping_cart.model';
+import { Categories } from './categories.model';
 
 @Table
 export class Product extends Model {
   @PrimaryKey
   @Column
-  @HasMany(() => ProductCategories, 'product_id')
-  @HasMany(() => ShoppingCart, 'product_id')
   id: number;
 
   @Column({
@@ -36,4 +37,13 @@ export class Product extends Model {
   @ForeignKey(() => User)
   @Column
   owner_id: number;
+
+  @BelongsToMany(() => Categories, () => ProductCategories)
+  categories: Categories[];
+
+  @HasMany(() => ShoppingCart)
+  shopping_carts: ShoppingCart[];
+
+  @BelongsTo(() => User, 'owner_id')
+  owner: User;
 }
