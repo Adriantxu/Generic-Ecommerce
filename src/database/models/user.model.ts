@@ -1,30 +1,34 @@
-import { Model, NotNull, PrimaryKey, Unique } from 'sequelize-typescript';
+import { Model, PrimaryKey, HasMany, HasOne } from 'sequelize-typescript';
 import { Column, Table } from 'sequelize-typescript';
 import { Product } from './product.model';
-import { BelongsToMany } from 'sequelize-typescript';
 import { ShoppingCart } from './shopping_cart.model';
 
-@Table
+@Table({ tableName: 'Users' })
 export class User extends Model {
-  @Column
   @PrimaryKey
-  @BelongsToMany(() => Product, () => ShoppingCart)
+  @Column
+  @HasMany(() => Product, 'owner_id')
+  @HasOne(() => ShoppingCart, 'user_id')
   id: number;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   name: string;
 
-  @Column
-  @NotNull
-  @Unique
+  @Column({
+    allowNull: false,
+    unique: true,
+  })
   email: string;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   password: string;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   role: string;
 }

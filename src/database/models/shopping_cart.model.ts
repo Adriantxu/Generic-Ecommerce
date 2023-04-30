@@ -1,27 +1,31 @@
 import {
+  BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   Model,
-  NotNull,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Product } from './product.model';
 
-@Table
+@Table({ tableName: 'Shopping_Cart' })
 export class ShoppingCart extends Model {
-  @Column
   @PrimaryKey
   @ForeignKey(() => User)
+  @Column
+  @BelongsTo(() => User, 'id')
   user_id: number;
 
-  @Column
   @PrimaryKey
   @ForeignKey(() => Product)
+  @Column
+  @BelongsToMany(() => Product, 'id')
   product_id: number;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   quantity: number;
 }

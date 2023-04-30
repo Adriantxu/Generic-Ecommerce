@@ -1,4 +1,5 @@
 import {
+  BelongsToMany,
   Column,
   ForeignKey,
   Model,
@@ -8,15 +9,17 @@ import {
 import { Product } from './product.model';
 import { Categories } from './categories.model';
 
-@Table
+@Table({ tableName: 'Product_Categories' })
 export class ProductCategories extends Model {
-  @Column
   @PrimaryKey
+  @Column
   @ForeignKey(() => Product)
+  @BelongsToMany(() => Product, 'id')
   product_id: number;
 
-  @Column
   @PrimaryKey
+  @Column
   @ForeignKey(() => Categories)
+  @BelongsToMany(() => Categories, 'id')
   category_id: number;
 }

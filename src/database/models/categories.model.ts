@@ -1,8 +1,8 @@
 import {
-  BelongsTo,
+  AutoIncrement,
   Column,
+  HasMany,
   Model,
-  NotNull,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
@@ -10,12 +10,14 @@ import { ProductCategories } from './product_categories.model';
 
 @Table
 export class Categories extends Model {
-  @Column
   @PrimaryKey
-  @BelongsTo(() => ProductCategories)
+  @AutoIncrement
+  @Column
+  @HasMany(() => ProductCategories, 'category_id')
   id: number;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   name: string;
 }

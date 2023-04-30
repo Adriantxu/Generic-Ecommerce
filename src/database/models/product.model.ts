@@ -1,9 +1,8 @@
 import {
-  BelongsToMany,
   Column,
   ForeignKey,
+  HasMany,
   Model,
-  NotNull,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
@@ -13,24 +12,28 @@ import { ShoppingCart } from './shopping_cart.model';
 
 @Table
 export class Product extends Model {
-  @Column
   @PrimaryKey
-  @BelongsToMany(() => ProductCategories, () => ShoppingCart)
+  @Column
+  @HasMany(() => ProductCategories, 'product_id')
+  @HasMany(() => ShoppingCart, 'product_id')
   id: number;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   name: string;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   description: string;
 
-  @Column
-  @NotNull
+  @Column({
+    allowNull: false,
+  })
   price: number;
 
-  @Column
   @ForeignKey(() => User)
+  @Column
   owner_id: number;
 }
