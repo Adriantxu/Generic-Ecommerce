@@ -17,6 +17,7 @@ export class AuthService {
       where: {
         email: dto.email,
       },
+      raw: true,
     });
     // if its not found throw an error
     if (userExist) {

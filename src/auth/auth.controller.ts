@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Post,
@@ -15,6 +16,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { validate } from 'class-validator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,7 +43,11 @@ export class AuthController {
   })
   @Post('signup')
   @UsePipes()
-  signUp(@Body() dto: AuthRegisterDto) {
+  async signUp(@Body() dto: AuthRegisterDto) {
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
     return this.authService.register(dto);
   }
 
@@ -65,7 +71,11 @@ export class AuthController {
   })
   @Post('login')
   @UsePipes()
-  login(@Body() dto: AuthLoginDto) {
+  async login(@Body() dto: AuthLoginDto) {
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
     return this.authService.login(dto);
   }
 }

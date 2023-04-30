@@ -11,10 +11,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: process.env.SECRET,
     });
   }
-  async validate(payload: { sub: number; email: string }) {
-    const user = await User.findOne({
+  validate(payload: { sub: number; email: string }) {
+    return User.findOne({
       where: { id: payload.sub },
+      raw: true,
     });
-    return user;
   }
 }
