@@ -22,7 +22,7 @@ export const databaseProviders = [
         ProductCategories,
         ShoppingCart,
       ]),
-        await sequelize.sync();
+      await sequelize.sync();
       return sequelize;
     },
   },
