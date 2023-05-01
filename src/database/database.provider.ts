@@ -22,7 +22,13 @@ export const databaseProviders = [
         ProductCategories,
         ShoppingCart,
       ])
-      await sequelize.sync();
+      try {
+        await sequelize.authenticate();
+        await sequelize.sync();
+        console.log('Connection has been established successfully.');
+      } catch (e) {
+        console.error(e);
+      }
       return sequelize;
     },
   },
