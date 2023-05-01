@@ -8,7 +8,7 @@ import {
 import { Product } from './product.model';
 import { Categories } from './categories.model';
 
-@Table({ tableName: 'Product_Categories' })
+@Table({ tableName: 'Product_Categories', timestamps: false })
 export class ProductCategories extends Model {
   @PrimaryKey
   @ForeignKey(() => Product)

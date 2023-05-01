@@ -21,7 +21,7 @@ export const databaseProviders = [
         Categories,
         ProductCategories,
         ShoppingCart,
-      ]),
+      ])
       await sequelize.sync();
       return sequelize;
     },

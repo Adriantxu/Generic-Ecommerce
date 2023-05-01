@@ -7,9 +7,7 @@ import { User } from 'src/database/models/user.model';
 
 @Injectable({})
 export class AuthService {
-  constructor(
-    private jwt: JwtService,
-  ) {}
+  constructor(private jwt: JwtService) {}
 
   async register(dto: AuthRegisterDto) {
     // find the user email in the db
@@ -28,11 +26,10 @@ export class AuthService {
 
     // save the user in the database
     const user = await User.create({
-      data: {
-        name: dto.name,
-        email: dto.email,
-        password: pwdHashed,
-      },
+      name: dto.name,
+      email: dto.email,
+      password: pwdHashed,
+      role: dto.role,
     });
     // return the user created
     return this.signToken(user['id'], user['email']);

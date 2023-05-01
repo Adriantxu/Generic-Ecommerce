@@ -10,7 +10,7 @@ import {
 import { User } from './user.model';
 import { Product } from './product.model';
 
-@Table({ tableName: 'Shopping_Cart' })
+@Table({ tableName: 'Shopping_Cart', timestamps: false })
 export class ShoppingCart extends Model {
   @PrimaryKey
   @ForeignKey(() => User)

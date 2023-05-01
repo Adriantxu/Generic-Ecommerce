@@ -1,12 +1,14 @@
-import { Model, PrimaryKey, HasMany, HasOne } from 'sequelize-typescript';
+import { Model, PrimaryKey, HasMany, HasOne, AutoIncrement } from 'sequelize-typescript';
 import { Column, Table } from 'sequelize-typescript';
 import { Product } from './product.model';
 import { ShoppingCart } from './shopping_cart.model';
 
-@Table({ tableName: 'Users' })
+@Table({ tableName: 'Users', timestamps: false })
 export class User extends Model {
   @PrimaryKey
-  @Column
+  @Column({
+    autoIncrement: true,
+  })
   id: number;
 
   @Column({
