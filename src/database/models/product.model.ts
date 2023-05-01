@@ -1,4 +1,5 @@
 import {
+  AutoIncrement,
   BelongsTo,
   BelongsToMany,
   Column,
@@ -13,10 +14,12 @@ import { ProductCategories } from './product_categories.model';
 import { ShoppingCart } from './shopping_cart.model';
 import { Categories } from './categories.model';
 
-@Table
+@Table({ tableName: "Product", timestamps: false })
 export class Product extends Model {
   @PrimaryKey
-  @Column
+  @Column({
+    autoIncrement: true,
+  })
   id: number;
 
   @Column({

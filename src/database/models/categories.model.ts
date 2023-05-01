@@ -9,11 +9,12 @@ import {
 import { ProductCategories } from './product_categories.model';
 import { Product } from './product.model';
 
-@Table({ tableName: 'Categories' })
+@Table({ tableName: 'Categories', timestamps: false })
 export class Categories extends Model {
   @PrimaryKey
-  @AutoIncrement
-  @Column
+  @Column({
+    autoIncrement: true,
+  })
   id: number;
 
   @Column({
