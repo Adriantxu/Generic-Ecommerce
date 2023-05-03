@@ -33,7 +33,7 @@ export class UserService {
   }
 
   async remove(id: number) {
-    return await User.destroy({
+    await User.destroy({
       where: {
         id: id,
       },
