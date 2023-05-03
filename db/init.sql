@@ -11,7 +11,7 @@ CREATE TABLE Product (
   name VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   price FLOAT NOT NULL,
-  owner_id INTEGER REFERENCES Users(id)
+  seller_id INTEGER REFERENCES Users(id)
 );
 
 CREATE TABLE Categories (

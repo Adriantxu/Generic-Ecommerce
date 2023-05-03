@@ -1,33 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Headers } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import * as jwt from  "jsonwebtoken";
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard("jwt"))
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Get("me")
+  async findMe(@Headers("authorization") auth: string) {
+    const token: string = auth.split(" ")[1];
+    const decodedToken = jwt.decode(token);
+    const id = decodedToken.sub;
+    return await this.userService.findMe(+id);
   }
 
   @UseGuards(AuthGuard("jwt"))
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get("shops")
+  async findSellers() {
+    return await this.userService.findSellers();
   }
 
   @UseGuards(AuthGuard("jwt"))
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch("me")
+  async update(@Headers("authorization") auth: string, @Body() updateUserDto: UpdateUserDto) {
+    const token: string = auth.split(" ")[1];
+    const decodedToken = jwt.decode(token);
+    const id = decodedToken.sub;
+    return await this.userService.update(+id, updateUserDto);
   }
 
   @UseGuards(AuthGuard("jwt"))
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete("me")
+  async remove(@Headers("authorization") auth: string) {
+    const token: string = auth.split(" ")[1];
+    const decodedToken = jwt.decode(token);
+    const id = decodedToken.sub;
+    return await this.userService.remove(+id);
   }
 }

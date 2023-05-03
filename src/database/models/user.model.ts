@@ -1,4 +1,4 @@
-import { Model, PrimaryKey, HasMany, HasOne, AutoIncrement } from 'sequelize-typescript';
+import { Model, PrimaryKey, HasMany, HasOne } from 'sequelize-typescript';
 import { Column, Table } from 'sequelize-typescript';
 import { Product } from './product.model';
 import { ShoppingCart } from './shopping_cart.model';
@@ -32,7 +32,7 @@ export class User extends Model {
   })
   role: string;
 
-  @HasMany(() => Product, 'owner_id')
+  @HasMany(() => Product, 'seller_id')
   products: Product[];
 
   @HasOne(() => ShoppingCart, 'user_id')

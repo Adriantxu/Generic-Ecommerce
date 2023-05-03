@@ -4,23 +4,28 @@ import { User } from 'src/database/models/user.model';
 
 @Injectable()
 export class UserService {
-  async findAll() {
-    return await User.findAll({
-      raw: true,
-    });
-  }
-
-  async findOne(id: number) {
-    return await User.findOne({
+  async findMe(id: number) {
+    return User.findOne({
       where: {
         id: id,
       },
+      attributes: ['name', 'role'],
       raw: true,
-    });
+    }).then((value) => value);
+  }
+
+  async findSellers() {
+    return User.findAll({
+      where: {
+        role: '0',
+      },
+      attributes: ['name'],
+      raw: true,
+    }).then((values) => values.map((value) => value.name));
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await User.update(
+    return User.update(
       {
         ...updateUserDto,
       },
@@ -29,14 +34,14 @@ export class UserService {
           id: id,
         },
       },
-    );
+    ).then((value) => value);
   }
 
   async remove(id: number) {
-    await User.destroy({
+    return User.destroy({
       where: {
         id: id,
       },
-    });
+    }).then(() => {});
   }
 }
