@@ -11,10 +11,7 @@ export class UserController {
   @UseGuards(AuthGuard("jwt"))
   @Get("me")
   async findMe(@Headers("authorization") auth: string) {
-    const token: string = auth.split(" ")[1];
-    const decodedToken = jwt.decode(token);
-    const id = decodedToken.sub;
-    return await this.userService.findMe(+id);
+    return await this.userService.findMe(this.getId(auth));
   }
 
   @UseGuards(AuthGuard("jwt"))
@@ -26,18 +23,20 @@ export class UserController {
   @UseGuards(AuthGuard("jwt"))
   @Patch("me")
   async update(@Headers("authorization") auth: string, @Body() updateUserDto: UpdateUserDto) {
-    const token: string = auth.split(" ")[1];
-    const decodedToken = jwt.decode(token);
-    const id = decodedToken.sub;
-    return await this.userService.update(+id, updateUserDto);
+    return await this.userService.update(this.getId(auth), updateUserDto);
   }
 
   @UseGuards(AuthGuard("jwt"))
   @Delete("me")
   async remove(@Headers("authorization") auth: string) {
+    return await this.userService.remove(this.getId(auth));
+  }
+
+  getId(auth: string): number {
     const token: string = auth.split(" ")[1];
     const decodedToken = jwt.decode(token);
     const id = decodedToken.sub;
-    return await this.userService.remove(+id);
+    return (+id);
   }
+
 }
