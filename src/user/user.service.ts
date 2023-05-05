@@ -11,12 +11,13 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    return await User.findOne({
+    return User.findOne({
       where: {
         id: id,
       },
-      raw: true,
+      // raw: true,
     });
+    // return (await user).reload();
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
