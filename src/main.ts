@@ -11,6 +11,6 @@ async function bootstrap() {
       forbidUnknownValues: true,
     }),
   );
-  await app.listen(3000);
+  await app.listen(3030);
 }
 bootstrap();
