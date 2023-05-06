@@ -1,8 +1,8 @@
-import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Headers } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Delete, UseGuards, Headers } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import * as jwt from  "jsonwebtoken";
+import { IdFromJwt } from 'src/middleware/middleware.id';
 
 @Controller('user')
 export class UserController {
@@ -10,8 +10,8 @@ export class UserController {
 
   @UseGuards(AuthGuard("jwt"))
   @Get("me")
-  async findMe(@Headers("authorization") auth: string) {
-    return await this.userService.findMe(this.getId(auth));
+  async findMe(@IdFromJwt() id: number) {
+    return await this.userService.findMe(id);
   }
 
   @UseGuards(AuthGuard("jwt"))
@@ -22,21 +22,13 @@ export class UserController {
 
   @UseGuards(AuthGuard("jwt"))
   @Patch("me")
-  async update(@Headers("authorization") auth: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.update(this.getId(auth), updateUserDto);
+  async update(@IdFromJwt() id: number, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @UseGuards(AuthGuard("jwt"))
   @Delete("me")
-  async remove(@Headers("authorization") auth: string) {
-    return await this.userService.remove(this.getId(auth));
+  async remove(@IdFromJwt() id: number) {
+    return await this.userService.remove(id);
   }
-
-  getId(auth: string): number {
-    const token: string = auth.split(" ")[1];
-    const decodedToken = jwt.decode(token);
-    const id = decodedToken.sub;
-    return (+id);
-  }
-
 }

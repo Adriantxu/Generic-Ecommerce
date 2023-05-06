@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from 'src/database/models/user.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UserService {
   async findMe(id: number) {
-    return User.findOne({
-      where: {
-        id: id,
-      },
-      attributes: ['name', 'role'],
-      raw: true,
+    return User.findByPk(id, {
+      attributes: ['name', 'email', 'role'],
     }).then((value) => value);
   }
 
   async findSellers() {
     return User.findAll({
       where: {
-        role: '0',
+        role: {
+          [Op.eq]: 0,
+        },
       },
-      attributes: ['name'],
       raw: true,
+      attributes: ['name'],
     }).then((values) => values.map((value) => value.name));
   }
 
@@ -31,7 +30,9 @@ export class UserService {
       },
       {
         where: {
-          id: id,
+          id: {
+            [Op.eq]: id,
+          },
         },
       },
     ).then((value) => value);
@@ -40,7 +41,9 @@ export class UserService {
   async remove(id: number) {
     return User.destroy({
       where: {
-        id: id,
+        id: {
+          [Op.eq]: id,
+        },
       },
     }).then(() => {});
   }
