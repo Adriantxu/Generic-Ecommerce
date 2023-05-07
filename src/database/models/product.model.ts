@@ -39,7 +39,7 @@ export class Product extends Model {
 
   @ForeignKey(() => User)
   @Column
-  owner_id: number;
+  seller_id: number;
 
   @BelongsToMany(() => Categories, () => ProductCategories)
   categories: Categories[];
@@ -47,6 +47,6 @@ export class Product extends Model {
   @BelongsTo(() => ShoppingCart, "user_id")
   shopping_carts: ShoppingCart;
 
-  @BelongsTo(() => User, 'owner_id')
+  @BelongsTo(() => User, 'seller_id')
   owner: User;
 }

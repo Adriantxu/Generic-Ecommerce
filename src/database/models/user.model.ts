@@ -72,7 +72,7 @@ export class User extends Model {
   })
   role: number;
 
-  @HasMany(() => Product, 'owner_id')
+  @HasMany(() => Product, 'seller_id')
   products: Product[];
 
   @HasOne(() => ShoppingCart, 'user_id')

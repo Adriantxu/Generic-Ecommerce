@@ -1,43 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from 'src/database/models/user.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UserService {
-  async findAll() {
-    return await User.findAll({
-      raw: true,
-    });
+  async findMe(id: number) {
+    return User.findByPk(id, {
+      attributes: ['name', 'email', 'role'],
+    }).then((value) => value);
   }
 
-  async findOne(id: number) {
-    return User.findOne({
+  async findSellers() {
+    return User.findAll({
       where: {
-        id: id,
+        role: {
+          [Op.eq]: 0,
+        },
       },
-      // raw: true,
-    });
-    // return (await user).reload();
+      raw: true,
+      attributes: ['name'],
+    }).then((values) => values.map((value) => value.name));
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await User.update(
+    return User.update(
       {
         ...updateUserDto,
       },
       {
         where: {
-          id: id,
+          id: {
+            [Op.eq]: id,
+          },
         },
       },
-    );
+    ).then((value) => value);
   }
 
   async remove(id: number) {
-    await User.destroy({
+    return User.destroy({
       where: {
-        id: id,
+        id: {
+          [Op.eq]: id,
+        },
       },
-    });
+    }).then(() => {});
   }
 }
