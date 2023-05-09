@@ -1,39 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @UseGuards(AuthGuard("jwt"))
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  async create(@Body() createProductDto: CreateProductDto) {
+    return await this.productService.create(createProductDto);
   }
 
+  @UseGuards(AuthGuard("jwt"))
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async findAll() {
+    return await this.productService.findAll();
   }
 
-  @Get(':categorie')
-  findByCategorie(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  @UseGuards(AuthGuard("jwt"))
+  @Get('category/:category')
+  async findByCategorie(@Param('category') category: string) {
+    return await this.productService.findByCategory(category);
   }
 
-  @Get(':seller')
-  findBySeller(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  @UseGuards(AuthGuard("jwt"))
+  @Get('seller/:seller')
+  async findBySeller(@Param('seller') seller: string) {
+    return await this.productService.findBySeller(seller);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @UseGuards(AuthGuard("jwt"))
+  @Patch('id')
+  async update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
+    return await this.productService.update(id, updateProductDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  @UseGuards(AuthGuard("jwt"))
+  @Delete('id')
+  async remove(@Param('id') id: number) {
+    return await this.productService.remove(id);
   }
 }
