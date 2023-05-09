@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
+import { ShoppingCartModule } from './shopping_cart/shopping_cart.module';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     UserModule,
     ProductModule,
+    ShoppingCartModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
