@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ShoppingCartService } from './shopping_cart.service';
 import { CreateShoppingCartDto } from './dto/create-shopping_cart.dto';
 import { UpdateShoppingCartDto } from './dto/update-shopping_cart.dto';
@@ -12,18 +20,16 @@ export class ShoppingCartController {
     return this.shoppingCartService.create(createShoppingCartDto);
   }
 
-  @Get()
-  findAll() {
-    return this.shoppingCartService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.shoppingCartService.findOne(id);
+    return this.shoppingCartService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShoppingCartDto: UpdateShoppingCartDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateShoppingCartDto: UpdateShoppingCartDto,
+  ) {
     return this.shoppingCartService.update(+id, updateShoppingCartDto);
   }
 
