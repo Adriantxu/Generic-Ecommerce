@@ -7,23 +7,23 @@ import { Categories } from 'src/database/models/categories.model';
 
 @Injectable()
 export class ProductService {
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user_id: number) {
     return Product.create(
       {
         name: createProductDto.name,
         description: createProductDto.description,
         price: createProductDto.price,
-        seller: createProductDto.seller,
+        seller_id: user_id,
       },
       { raw: true },
-    ).then((values) => values);
+    );
   }
 
   async findAll() {
     return Product.findAll({
       raw: true,
       attributes: ['name', 'description', 'price'],
-    }).then((values) => values);
+    });
   }
 
   async findByCategory(category: string) {
@@ -42,21 +42,22 @@ export class ProductService {
       },
       raw: true,
       attributes: ['name'],
-    }).then((value) => value);
+    });
   }
 
-  async findBySeller(seller: string) {
+  async findBySeller(seller_id: number) {
     // relate seller with user table
     return Product.findAll({
+      where: { seller_id },
       raw: true,
-      attributes: ['name'],
-    }).then((values) => values);
+      attributes: ['id', 'name', 'description', 'price'],
+    });
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     return Product.update(
       {
-        ...UpdateProductDto,
+        ...updateProductDto,
       },
       {
         where: {
@@ -65,7 +66,7 @@ export class ProductService {
           },
         },
       },
-    ).then((value) => value);
+    );
   }
 
   async remove(id: number) {
@@ -75,6 +76,6 @@ export class ProductService {
           [Op.eq]: id,
         },
       },
-    }).then((_) => {});
+    }).then(() => ({}));
   }
 }

@@ -1,46 +1,86 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { IdFromJwt } from 'src/middleware/middleware.id';
+import { UserService } from 'src/user/user.service';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly userService: UserService,
+  ) {}
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  async create(@Body() createProductDto: CreateProductDto) {
-    return await this.productService.create(createProductDto);
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @IdFromJwt() id: number,
+  ) {
+    const user = await this.userService.findMe(id);
+    if (+user.dataValues['role'] !== 0) {
+      throw new BadRequestException(
+        `This user with role ${user.dataValues['role']} cannot create products.`,
+      );
+    }
+    return this.productService.create(createProductDto, id);
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   async findAll() {
-    return await this.productService.findAll();
+    return this.productService.findAll();
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard('jwt'))
   @Get('category/:category')
   async findByCategorie(@Param('category') category: string) {
-    return await this.productService.findByCategory(category);
+    return this.productService.findByCategory(category);
   }
 
-  @UseGuards(AuthGuard("jwt"))
-  @Get('seller/:seller')
-  async findBySeller(@Param('seller') seller: string) {
-    return await this.productService.findBySeller(seller);
+  @UseGuards(AuthGuard('jwt'))
+  @Get('user')
+  async findBySeller(@IdFromJwt() id: number) {
+    return this.productService.findBySeller(id);
   }
 
-  @UseGuards(AuthGuard("jwt"))
-  @Patch('id')
-  async update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
-    return await this.productService.update(id, updateProductDto);
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id')
+  async update(
+    @IdFromJwt() user_id: number,
+    @Param('id') id: number,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    const products = await this.productService.findBySeller(user_id);
+    const existsProd: boolean = products.some((product) => product.id == id);
+    if (!existsProd) {
+      throw new BadRequestException('Product does not exist');
+    }
+    return this.productService
+      .update(id, updateProductDto)
+      .then(() => this.productService.findBySeller(user_id));
   }
 
-  @UseGuards(AuthGuard("jwt"))
-  @Delete('id')
-  async remove(@Param('id') id: number) {
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  async remove(@IdFromJwt() user_id: number, @Param('id') id: number) {
+    const products = await this.productService.findBySeller(user_id);
+    const existsProd: boolean = products.some((product) => product.id == id);
+    if (!existsProd) {
+      throw new BadRequestException('Product does not exist');
+    }
     return await this.productService.remove(id);
   }
 }
