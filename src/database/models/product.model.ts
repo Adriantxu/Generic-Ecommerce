@@ -1,10 +1,8 @@
 import {
-  AutoIncrement,
   BelongsTo,
   BelongsToMany,
   Column,
   ForeignKey,
-  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -14,7 +12,7 @@ import { ProductCategories } from './product_categories.model';
 import { ShoppingCart } from './shopping_cart.model';
 import { Categories } from './categories.model';
 
-@Table({ tableName: "Product", timestamps: false })
+@Table({ tableName: 'Product', timestamps: false })
 export class Product extends Model {
   @PrimaryKey
   @Column({
@@ -38,13 +36,13 @@ export class Product extends Model {
   price: number;
 
   @ForeignKey(() => User)
-  @Column
+  @Column({})
   seller_id: number;
 
   @BelongsToMany(() => Categories, () => ProductCategories)
   categories: Categories[];
 
-  @BelongsTo(() => ShoppingCart, "user_id")
+  @BelongsTo(() => ShoppingCart, 'user_id')
   shopping_carts: ShoppingCart;
 
   @BelongsTo(() => User, 'seller_id')

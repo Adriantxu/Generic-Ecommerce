@@ -8,7 +8,7 @@ export class UserService {
   async findMe(id: number) {
     return User.findByPk(id, {
       attributes: ['name', 'email', 'role'],
-    }).then((value) => value);
+    });
   }
 
   async findSellers() {
@@ -35,7 +35,7 @@ export class UserService {
           },
         },
       },
-    ).then((value) => value);
+    );
   }
 
   async remove(id: number) {
@@ -45,6 +45,6 @@ export class UserService {
           [Op.eq]: id,
         },
       },
-    }).then(() => {});
+    }).then(() => ({}));
   }
 }
