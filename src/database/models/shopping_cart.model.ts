@@ -30,6 +30,8 @@ export class ShoppingCart extends Model {
   @BelongsTo(() => User, 'user_id')
   user: User;
 
-  @HasMany(() => Product, 'product_id')
-  product: Product[];
+  // @HasMany(() => Product, 'product_id')
+  // product: Product[];
+  @BelongsTo(() => Product, 'product_id')
+  product: Product;
 }

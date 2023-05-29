@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { ShoppingCartService } from './shopping_cart.service';
 import { CreateShoppingCartDto } from './dto/create-shopping_cart.dto';
-import { UpdateShoppingCartDto } from './dto/update-shopping_cart.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IdFromJwt } from 'src/middleware/middleware.id';
 
@@ -24,28 +23,24 @@ export class ShoppingCartController {
     @IdFromJwt() id: number,
     @Body() createShoppingCartDto: CreateShoppingCartDto,
   ) {
-    return this.shoppingCartService.create(id, createShoppingCartDto);
+    return this.shoppingCartService.addProductToCart(id, createShoppingCartDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shoppingCartService.findOne(+id);
+  @Get('me')
+  findOne(@IdFromJwt() user_id: number) {
+    return this.shoppingCartService.getUserShoppingCartAndPrice(+user_id);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch(':id')
-  update(
-    @IdFromJwt() user_id: number,
-    @Param('id') id: string,
-    @Body() updateShoppingCartDto: UpdateShoppingCartDto,
-  ) {
-    return this.shoppingCartService.update(user_id, +id, updateShoppingCartDto);
+  @Patch('me')
+  update(@IdFromJwt() user_id: number, @Body() body: CreateShoppingCartDto) {
+    return this.shoppingCartService.updateProductInCart(user_id, body);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shoppingCartService.remove(+id);
+  @Delete('me')
+  remove(@IdFromJwt() user_id: number) {
+    return this.shoppingCartService.remove(+user_id);
   }
 }
